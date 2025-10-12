@@ -1,12 +1,9 @@
 // --- React 및 관련 라이브러리 임포트 ---
 import EmotionPicker from "../components/EmotionPicker.jsx";
 import { useState, useEffect } from "react";
+// 여기는 더미데이터를 가져와서 적용
+import { POSITIVE, NEGATIVE, AMBIGUOUS } from "../Data/data.jsx";
 
-// --- 상수 데이터 ---
-// [데이터] 감정 카테고리별 목록. EmotionPicker 컴포넌트로 전달됨.
-const POSITIVE = ["감탄","재미","인정","보살핌","욕망","열광","감사","기쁨","애정","낙관","자부심","안도"];
-const NEGATIVE = ["분노","짜증","실망","비난","혐오","당혹감","두려움","비통","초조함","후회","슬픔"];
-const AMBIGUOUS = ["혼란","호기심","깨달음","놀람"];
 
 // --- 메인 컴포넌트: AI 재학습 페이지 ---
 // AI가 분석한 댓글의 감정 데이터를 관리자가 직접 검토하고 수정하는 페이지.

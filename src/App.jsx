@@ -15,41 +15,9 @@ import FindPasswordPage from "./pages/FindPasswordPage.jsx";
 // --- 유틸리티 및 전역 스타일 임포트 ---
 import { ToastProvider } from "./components/Toast.jsx";
 import "./styles/index.css";
+// 여기는 더미데이터를 가져와서 적용
+import { seedBefore, initialUsers, createDummyAdmins } from "./Data/data.jsx";
 
-// --- 초기 더미 데이터 생성 함수 ---
-
-// [데이터] AI 재학습 '수정 전' 목록의 초기 데이터를 생성함.
-const seedBefore = () => [
-  { id: 1, learned: false, comment: "이 곡 멜로디가 너무 슬퍼요... 눈물 난다", emotions: ["슬픔", "후회", "혼란", "비통", "초조함"], confidence: 0.47 },
-  { id: 2, learned: false, comment: "So uplifting and happy! made my day :)", emotions: ["기쁨", "감탄", "낙관"], confidence: 0.71 },
-  { id: 3, learned: false, comment: "가사는 좋은데 보컬이 좀 거슬림", emotions: ["분노", "실망", "짜증"], confidence: 0.62 },
-  { id: 4, learned: false, comment: "Not my vibe, but production is clean", emotions: ["혼란", "깨달음", "놀람"], confidence: 0.55 },
-  { id: 5, learned: false, comment: "소름 돋았어... 소리 너무 좋다", emotions: ["놀람", "기쁨"], confidence: 0.68 },
-  { id: 6, learned: false, comment: "boring... skipped after 30s", emotions: ["초조함", "실망"], confidence: 0.41 },
-  { id: 7, learned: false, comment: "드럼 소리 미쳤다! 무대에서 듣고 싶음", emotions: ["열광", "낙관"], confidence: 0.69 },
-  { id: 8, learned: false, comment: "lyrics are dark but kinda beautiful", emotions: ["슬픔", "감탄", "낙관", "애정", "감사"], confidence: 0.58 },
-];
-
-// [데이터] 유저 관리 목록의 초기 데이터를 생성함.
-const initialUsers = () => [
-  { id: 'U1004', name: '홍길동 5', email: 'user5@example.com', signupDate: '2025-08-05', lastActive: '오늘', status: 'SUSPENDED' },
-  { id: 'U1007', name: '홍길동 8', email: 'user8@example.com', signupDate: '2025-08-08', lastActive: '오늘', status: 'BLOCKED' },
-  { id: 'U1009', name: '홍길동 10', email: 'user10@example.com', signupDate: '2025-08-10', lastActive: '어제', status: 'SUSPENDED' },
-  { id: 'U1011', name: '홍길동 12', email: 'user12@example.com', signupDate: '2025-08-12', lastActive: '3일 전', status: 'BLOCKED' },
-  { id: 'U1012', name: '홍길동 13', email: 'user13@example.com', signupDate: '2025-08-13', lastActive: '오늘', status: 'SUSPENDED' },
-  { id: 'U1016', name: '홍길동 17', email: 'user17@example.com', signupDate: '2025-08-17', lastActive: '5일 전', status: 'BLOCKED' },
-];
-
-// [데이터] 관리자 계정의 초기 데이터를 생성함.
-const createDummyAdmins = () => [
-    { id: 'compasstep', password: 'compasstep', role: 'root', temp: false, nickname: '루트 관리자' },
-    { id: 'choisw0404@naver.com', password: '1234', role: 'general', temp: true, nickname: '최성원' },
-    { id: 'xzv01299@gmail.com', password: 'password1', role: 'general', temp: false, nickname: '최성원A' },
-    { id: 'open_gg@naver.com', password: 'password2', role: 'general', temp: false, nickname: '최성원B' },
-    { id: 'hyunjune2001@gmail.com', password: 'password3', role: 'general', temp: false, nickname: '최성원C' },
-    { id: 'grayhat3400@gmail.com', password: 'password4', role: 'general', temp: false, nickname: '최성원D' },
-    { id: 'sharon0320@gachon.ac.kr', password: 'password5', role: 'general', temp: false, nickname: '애런 예거' },
-];
 
 // --- 하위 컴포넌트: 기본 레이아웃 ---
 // 로그인 후 모든 페이지에 공통적으로 적용되는 사이드바와 헤더를 포함한 레이아웃.
