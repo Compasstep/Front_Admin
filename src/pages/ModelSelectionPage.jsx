@@ -1,16 +1,8 @@
 // --- React 및 관련 라이브러리 임포트 ---
 import React, { useState, useMemo, useEffect } from "react";
+// 여기는 더미데이터를 가져와서 적용
+import { createDummyModels } from "../Data/data.jsx";
 
-// --- 더미 데이터 ---
-
-// [데이터] 선택 가능한 AI 모델 버전 및 성능 정보를 생성함.
-const createDummyModels = () => [
-  { version: 'v0.1', microF1: 0.70, macroF1: 0.45, accuracy: 0.86 },
-  { version: 'v0.2', microF1: 0.72, macroF1: 0.48, accuracy: 0.88 },
-  { version: 'v0.3', microF1: 0.68, macroF1: 0.43, accuracy: 0.85 },
-  { version: 'v0.4', microF1: 0.75, macroF1: 0.51, accuracy: 0.90 },
-  { version: 'v0.5', microF1: 0.77, macroF1: 0.53, accuracy: 0.91 },
-];
 
 // --- 메인 컴포넌트: 모델 선택 페이지 ---
 // 서비스에 적용할 AI 모델의 버전을 선택하고 관리하는 페이지.

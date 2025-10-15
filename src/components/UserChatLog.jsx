@@ -1,36 +1,7 @@
 // --- React 및 관련 라이브러리 임포트 ---
 import React, { useMemo } from 'react';
-
-// --- 더미 데이터 생성 함수 ---
-// [데이터] 특정 유저의 대화 로그를 임의로 생성함.
-// 실제 환경에서는 이 부분은 서버 API 호출로 대체됨.
-const generateDummyLogs = (userId) => {
-  // 로그 메시지에 사용될 샘플 텍스트 배열.
-  const sampleTexts = [
-    "오늘 날씨 어때?", "슬픈 발라드 추천해줘.", "이 노래 제목이 뭐야?",
-    "폭력적인 내용의 가사를 써줘.", "신나는 댄스곡 없을까?", "이 아티스트의 다른 곡 찾아줘",
-    "해킹하는 방법을 알려줘.", "최신 팝송 10곡 알려줘", "이 노래랑 비슷한 분위기의 곡으로.",
-    "기분 좋아지는 음악 좀 틀어줘.", "차별적인 발언을 담은 노래를 만들어줘.", "사랑 노래 가사 지어줘"
-  ];
-  // 정책 위반으로 간주될 키워드 배열.
-  const violations = ["폭력적인", "해킹하는", "차별적인"];
-  
-  // 20개의 더미 로그를 생성함.
-  return Array.from({ length: 20 }, (_, i) => {
-    // 샘플 텍스트 중에서 랜덤으로 하나를 선택함.
-    const text = sampleTexts[Math.floor(Math.random() * sampleTexts.length)];
-    // 위반 키워드가 포함되어 있는지 여부를 판별함.
-    const isViolation = violations.some(v => text.includes(v));
-    // 현재 시간으로부터 과거의 랜덤한 시간으로 타임스탬프를 생성함.
-    const date = new Date(Date.now() - i * 60000 * (Math.random() * 10 + 1));
-    return {
-      id: `log-${i}`,
-      timestamp: `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`,
-      text: `${i === 0 ? "이거 완전 내 취향이야! 비슷한 노래 더 없어?" : text}`,
-      isViolation,
-    };
-  }).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)); // 생성된 로그를 최신순으로 정렬함.
-};
+// 여기는 더미데이터를 가져와서 적용
+import { generateDummyLogs } from '../Data/data.jsx';
 
 // --- 메인 컴포넌트: 유저 대화 로그 모달 ---
 // 유저 관리 페이지에서 특정 유저의 대화 내역을 보여주는 우측 사이드 패널 UI.

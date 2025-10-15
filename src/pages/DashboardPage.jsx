@@ -1,82 +1,8 @@
 // --- React 및 라이브러리 임포트 ---
 import { useMemo, useState, useEffect } from "react";
+// 여기는 더미데이터를 가져와서 적용
+import { KPI, BAR_DATA, DAILY_API_DETAILS, API_LIST } from "../Data/data.jsx";
 
-// --- 더미 데이터 ---
-
-// [데이터] KPI 카드 영역에 표시될 데이터.
-const KPI = {
-  totalUsers: 100,
-  todaySignups: 5,
-  badUsers: 3,
-  suspended: 3,
-};
-
-// [데이터] '총 API 호출 횟수' 막대그래프의 일자별 데이터.
-const BAR_DATA = [
-  { day: 'D1', calls: 3 }, { day: 'D2', calls: 5 }, { day: 'D3', calls: 7 },
-  { day: 'D4', calls: 6 }, { day: 'D5', calls: 8 }, { day: 'D6', calls: 9 },
-  { day: 'D7', calls: 5 },
-];
-
-// [데이터] 막대그래프 클릭 시 표시될 일자별 상세 API 호출 내역.
-const DAILY_API_DETAILS = {
-  D1: [
-    { name: "Lyrics Emotion Analyzer", calls: 2 },
-    { name: "Vector Updater", calls: 1 },
-  ],
-  D2: [
-    { name: "Admin Invite Email", calls: 2 },
-    { name: "OpenAI Chat Completions", calls: 1 },
-    { name: "Share Link Presigner", calls: 1 },
-    { name: "S3 SignedURL Maker", calls: 1 },
-  ],
-  D3: [
-    { name: "OpenAI Chat Completions", calls: 3 },
-    { name: "Fine-tune Queue Writer", calls: 2 },
-    { name: "WordCloud Generator", calls: 1 },
-    { name: "Vector Updater", calls: 1 },
-  ],
-  D4: [
-    { name: "Spotify Genre Ranker", calls: 3 },
-    { name: "Lyrics Emotion Analyzer", calls: 2 },
-    { name: "Batch Cleaner", calls: 1 },
-  ],
-  D5: [
-    { name: "Share Link Presigner", calls: 4 },
-    { name: "S3 SignedURL Maker", calls: 2 },
-    { name: "Admin Invite Email", calls: 1 },
-    { name: "Daily Snapshotter", calls: 1 },
-  ],
-  D6: [
-    { name: "OpenAI Chat Completions", calls: 3 },
-    { name: "Vector Updater", calls: 2 },
-    { name: "Lyrics Emotion Analyzer", calls: 2 },
-    { name: "WordCloud Generator", calls: 1 },
-    { name: "Share Link Presigner", calls: 1 },
-  ],
-  D7: [
-    { name: "Fine-tune Queue Writer", calls: 2 },
-    { name: "Spotify Genre Ranker", calls: 2 },
-    { name: "Keyword Stats Aggregator", calls: 1 },
-  ],
-};
-
-// [데이터] 'API 호출 시간' 목록에 표시될 데이터.
-const API_LIST = Array.from({ length: 15 }, (_, i) => {
-  const id = i + 1;
-  return {
-    id,
-    name: [
-      "WordCloud Generator", "Share Link Presigner", "Fine-tune Queue Writer",
-      "Spotify Genre Ranker", "OpenAI Chat Completions", "Lyrics Emotion Analyzer",
-      "Admin Invite Email", "Sentiment Classifier", "Queue Dashboard Pusher",
-      "Keyword Stats Aggregator", "Audio Preview Preset", "S3 SignedURL Maker",
-      "Vector Updater", "Batch Cleaner", "Daily Snapshotter",
-    ][i],
-    call: 100 + (i * 11 % 68),
-    resp: 40 + (i * 17 % 360),
-  };
-});
 
 // --- 커스텀 Hook: 팝오버 관리 ---
 // AI 재학습 요약 목록에서 감정 더보기를 위한 팝오버의 상태와 동작을 관리함.
