@@ -17,7 +17,7 @@ export default function LoginPage({ onLogin }) {
   // --- 2. 이벤트 핸들러 (Event Handlers) ---
 
   // [핸들러] 로그인 폼 제출 시 실행됨.
-  // --- [수정됨] API 호출(fetch)을 기다리기 위해 async 함수로 변경 ---
+  // --- [수정됨] onLogin이 async 함수이므로, handleSubmit도 async로 변경하고 await를 사용함. ---
   const handleSubmit = async (e) => {
     e.preventDefault(); // 폼의 기본 제출 동작(페이지 새로고침)을 막음.
     
@@ -29,7 +29,6 @@ export default function LoginPage({ onLogin }) {
     setError("");
 
     // App 컴포넌트로부터 받은 onLogin 함수를 호출하여 실제 로그인 인증을 시도함.
-    // --- [수정됨] onLogin이 끝날 때까지 기다림(await) ---
     const loginSuccess = await onLogin({ id, password: pw });
 
     // 로그인 결과가 실패(false)일 경우, 오류 메시지를 설정함.
@@ -40,6 +39,7 @@ export default function LoginPage({ onLogin }) {
     // 로그인 프로세스 종료: busy 상태를 false로 되돌림.
     setBusy(false);
   };
+  // --- [수정 완료] ---
 
   // --- 3. UI 렌더링 (JSX) ---
   return (
@@ -74,15 +74,15 @@ export default function LoginPage({ onLogin }) {
             className="input"
           />
           
-          {/* error 상태에 값이 있을 경우에만 오류 메시지를 렌더링함. */}
+          {/* error 상태에 값이 있을 경우에만 오류 메시지를 렌더링함 */}
           {error && <p style={{ color: 'red', fontSize: '14px', margin: '0', textAlign: 'left' }}>{error}</p>}
           
-          {/* 로그인 버튼 (busy 상태일 때 비활성화됨). */}
+          {/* 로그인 버튼 (busy 상태일 때 비활성화됨) */}
           <button type="submit" className="button" disabled={busy}>
             {busy ? "로그인 중..." : "로그인"}
           </button>
           
-          {/* 비밀번호 찾기 페이지로 이동하는 버튼. */}
+          {/* 비밀번호 찾기 페이지로 이동하는 버튼 */}
           <button
             type="button"
             className="forgot"
@@ -98,4 +98,3 @@ export default function LoginPage({ onLogin }) {
     </div>
   );
 }
-//

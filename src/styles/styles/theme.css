@@ -1,0 +1,151 @@
+/* src/styles/theme.css */
+
+/* 기본(라이트) 팔레트 */
+:root {
+  /* 배경/표면 */
+  --bg: #F5F7FB;                 /* 페이지 바탕 (#F9FAFB 대신 약간 채널 맞춤) */
+  --surface: #FFFFFF;            /* 카드, 입력창 배경 */
+  --surface-2: #F1F5F9;          /* 테이블 헤더/보조 표면 */
+  --border: #E5E7EB;             /* 경계선 */
+  --shadow: 0 10px 25px rgba(0,0,0,0.06);
+
+  /* 텍스트 */
+  --text: #0F172A;               /* 본문 */
+  --text-muted: #64748B;         /* 보조 */
+  --text-inverse: #FFFFFF;       /* 반전(버튼 안 글씨 등) */
+
+  /* 포커스/프라이머리 */
+  --primary: #2563EB;            /* 기존 디자인 블루 유지 */
+  --primary-weak: #EEF2FF;       /* pill, hover 배경 */
+  --success: #10B981;
+  --danger: #EF4444;
+}
+
+/* 다크 팔레트 */
+[data-theme="dark"] {
+  --bg: #0B1220;
+  --surface: #121A2B;
+  --surface-2: #0F1626;
+  --border: #1E293B;
+  --shadow: 0 10px 25px rgba(0,0,0,0.5);
+
+  --text: #E5EAF3;
+  --text-muted: #97A3B6;
+  --text-inverse: #0B1220;
+
+  --primary: #4F7BFF;           /* 다크에서 살짝 더 밝은 블루 */
+  --primary-weak: #1B2540;
+  --success: #22D3A3;
+  --danger: #F87171;
+}
+
+/* 전역 적용(기존 클래스/구조는 유지) */
+html, body {
+  background: var(--bg);
+  color: var(--text);
+}
+.page { background: var(--bg) !important; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+.kpi, .kpi-outline { background: var(--surface); border: 1px solid var(--border); }
+.kpi-label { color: var(--text-muted); }
+.kpi-value { color: var(--text); }
+
+.api-head, .queue-head {
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+  color: var(--text-muted);
+}
+.api-row, .queue-row {
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+
+.input, input.input {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+.input::placeholder { color: var(--text-muted); }
+
+.btn, .btn-small, .button {
+  background: var(--primary);
+  color: var(--text-inverse);
+  border: 1px solid transparent;
+}
+.btn:hover, .button:hover { filter: brightness(0.95); }
+
+.rank-pill {
+  background: var(--primary-weak);
+  color: var(--primary);
+}
+
+.chip {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+.chip-link {
+  background: var(--primary-weak);
+  color: var(--primary);
+  border-color: transparent;
+}
+
+.bar-chart-container .bar {
+  background: var(--primary);
+}
+.bar-label { color: var(--text-muted); }
+.xlabel-today { color: var(--primary) !important; }
+.bar-today .bar { filter: brightness(1.08); }
+
+/* API 상세 패널 */
+.api-details-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+/* 토글 스위치(테마 전용) */
+.theme-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px;
+  width: 92px; /* 아이콘 2개 + 패딩 */
+  height: 36px;
+  cursor: pointer;
+}
+.theme-toggle__track {
+  position: absolute;
+  inset: 4px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+}
+.theme-toggle__thumb {
+  position: absolute;
+  top: 4px;
+  left: 4px;               /* 라이트 위치 */
+  width: 40px;
+  height: 28px;
+  background: var(--primary);
+  border-radius: 999px;
+  transition: transform 160ms ease;
+}
+[data-theme="dark"] .theme-toggle__thumb {
+  transform: translateX(44px);  /* 다크 위치 */
+}
+.theme-toggle__icon {
+  display: grid;
+  place-items: center;
+  z-index: 1;
+  color: var(--text);
+}
+.theme-toggle__icon svg { width: 18px; height: 18px; }
