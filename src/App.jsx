@@ -15,7 +15,10 @@ import FindPasswordPage from "./pages/FindPasswordPage.jsx";
 // --- 유틸리티 및 전역 스타일 임포트 ---
 import { ToastProvider } from "./components/Toast.jsx";
 import "./styles/index.css";
-// 여기는 더미데이터를 가져와서 적용
+
+// --- [수정됨] ---
+// createDummyAdmins는 AdminPage, FindPasswordPage 등
+// 아직 마이그레이션되지 않은 다른 페이지에서 사용되므로, 임시로 남겨둠.
 import { seedBefore, initialUsers, createDummyAdmins } from "./Data/data.jsx";
 
 
@@ -33,7 +36,7 @@ function Layout({ userRole, onLogout, handleRefresh, pageTitle }) {
           <NavLink to="/" className={getNavLinkClass} end>{({isActive}) => (<><span className={isActive ? "dot" : "dot dot-muted"} />대시보드</>)}</NavLink>
           <NavLink to="/user" className={getNavLinkClass}>{({isActive}) => (<><span className={isActive ? "dot" : "dot dot-muted"} />유저 관리</>)}</NavLink>
           <NavLink to="/ai_retrain" className={getNavLinkClass}>{({isActive}) => (<><span className={isActive ? "dot" : "dot dot-muted"} />AI 재학습</>)}</NavLink>
-          {/* 루트 관리자일 경우에만 '관리자 관리'와 '모델 선택' 메뉴가 보임 */}
+          {/* 루트 관리자일 경우에만 '관리자 관리'와 '모델 선택' 메뉴가 보이도록 함 */}
           {userRole === 'root' && (
             <>
               <NavLink to="/manager" className={getNavLinkClass}>{({isActive}) => (<><span className={isActive ? "dot" : "dot dot-muted"} />관리자 관리</>)}</NavLink>
@@ -72,6 +75,9 @@ export default function App() {
   
   // [데이터] 유저 및 관리자 목록 상태.
   const [users, setUsers] = useState(initialUsers());
+  
+  // [수정됨] admins 상태는 AdminPage와 FindPasswordPage에서
+  // 아직 더미 데이터로 사용되므로, 임시로 유지함.
   const [admins, setAdmins] = useState(createDummyAdmins());
 
   // [유틸리티] 새로고침 버튼 클릭 시 자식 컴포넌트의 상태를 리셋하기 위한 '신호'.
@@ -83,31 +89,59 @@ export default function App() {
   // --- 2. 이벤트 핸들러 (Event Handlers) ---
   
   // [핸들러] 로그인 처리 로직.
-  const handleLogin = (credentials) => {
-    const admin = admins.find(a => a.id === credentials.id && a.password === credentials.password);
-    if (admin) {
-      // 임시 비밀번호 사용자인 경우, 비밀번호 변경 페이지로 이동시킴.
-      if (admin.temp) {
-        navigate('/pswchange', { state: { email: admin.id } });
-        return true;
+  // --- [수정됨] ---
+  // 더미 데이터(admins 배열)를 확인하는 대신,
+  // 실제 백엔드 API 서버로 네트워크 요청을 보냄. (async 함수로 변경)
+  const handleLogin = async (credentials) => {
+    try {
+      const response = await fetch("/api/admin/login", { // API 명세서의 주소
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: credentials.id, // LoginPage.jsx에서 'id'로 전달됨.
+          password: credentials.password,
+        }),
+        // [중요] 서버와 쿠키를 주고받기 위한 필수 옵션임!
+        // 이 옵션이 있어야 서버가 보낸 쿠키(access_token 등)가 브라우저에 저장됨.
+        credentials: "include", 
+      });
+
+      if (response.ok) {
+        // 로그인 성공 (2xx 응답)
+        // 서버로부터 JSON 형태의 응답을 받음. (예: { "role": "root" })
+        const data = await response.json(); 
+        
+        setAuthed(true);
+        setUserRole(data.role); // 서버가 보내준 실제 권한으로 설정.
+        navigate('/'); // 대시보드로 이동
+        return true; // LoginPage.jsx에 성공(true)을 반환함.
+      
+      } else {
+        // 로그인 실패 (401 Unauthorized 등)
+        return false; // LoginPage.jsx에 실패(false)를 반환함.
       }
-      // 일반 로그인 성공 시 상태 업데이트 및 대시보드로 이동.
-      setAuthed(true);
-      setUserRole(admin.role);
-      navigate('/');
-      return true;
+
+    } catch (error) {
+      // 네트워크 오류 등 fetch 자체가 실패한 경우
+      console.error("로그인 API 호출 중 오류 발생:", error);
+      return false; // LoginPage.jsx에 실패(false)를 반환함.
     }
-    return false; // 로그인 실패 시 false 반환.
   };
+  // --- [수정 완료] ---
   
   // [핸들러] 로그아웃 처리 로직.
   const handleLogout = () => {
+    // (참고: 실제로는 /api/admin/logout POST 요청을 보내야 하지만,
+    //  우선은 프론트엔드 상태만 초기화함.)
     setAuthed(false);
     setUserRole(null);
     navigate('/login');
   };
 
   // [핸들러] 비밀번호 변경 처리 로직 (임시 비밀번호 사용자가 새 비밀번호 설정 시).
+  // (참고: 이 부분은 아직 더미데이터(admins 배열)를 사용함.)
   const handlePasswordChange = (email, newPassword) => {
     setAdmins(currentAdmins => 
       currentAdmins.map(admin => 
@@ -119,13 +153,12 @@ export default function App() {
   };
 
   // [핸들러] 새로고침 버튼 클릭 처리 로직.
+  // (참고: 이 부분은 아직 더미데이터를 사용함.)
   const handleRefresh = () => {
-    // 모든 데이터를 초기 더미 데이터로 리셋함.
     setBefore(seedBefore());
     setAfter([]);
     setUsers(initialUsers());
-    setAdmins(createDummyAdmins());
-    // refreshKey 값을 변경하여 자식 컴포넌트에 리셋 신호를 보냄.
+    setAdmins(createDummyAdmins()); // <-- 이 부분 때문에 admins 상태 유지 필요
     setRefreshKey(prevKey => prevKey + 1);
   };
 
@@ -137,6 +170,7 @@ export default function App() {
         {/* 인증이 필요 없는 페이지들 */}
         <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
         <Route path="/pswchange" element={<PasswordChangePage onPasswordChange={handlePasswordChange} />} />
+        {/* FindPasswordPage는 아직 더미데이터(admins)를 사용함. */}
         <Route path="/find-password" element={<FindPasswordPage admins={admins} />} />
         
         {/* 인증이 필요한 페이지들 (Layout 컴포넌트 사용) */}
@@ -144,12 +178,13 @@ export default function App() {
           path="/" 
           element={authed ? <Layout userRole={userRole} onLogout={handleLogout} handleRefresh={handleRefresh} pageTitle={pageTitle} /> : <Navigate to="/login" />}
         >
-          {/* 각 페이지 경로와 렌더링할 컴포넌트를 정의하고 필요한 props를 전달함 */}
+          {/* 각 페이지 경로와 렌더링할 컴포넌트를 정의하고 필요한 props를 전달함. */}
           <Route index element={<DashboardPage queueItems={before} onGotoRetrain={() => navigate('/ai_retrain')} setPageTitle={setPageTitle} onGotoUserManagement={(status) => navigate(`/user?status=${status}`)} refreshKey={refreshKey} />} />
           <Route path="user" element={<UserManagementPage users={users} setUsers={setUsers} setPageTitle={setPageTitle} />} />
           <Route path="ai_retrain" element={<RetrainPage before={before} setBefore={setBefore} after={after} setAfter={setAfter} setPageTitle={setPageTitle} />} />
           
           {/* 루트 관리자 전용 페이지 (접근 제어) */}
+          {/* AdminPage는 아직 더미데이터(admins)를 사용함. */}
           <Route 
             path="manager" 
             element={userRole === 'root' ? <AdminPage admins={admins.filter(a => a.role !== 'root')} setAdmins={setAdmins} setPageTitle={setPageTitle} /> : <Navigate to="/" />} 
@@ -166,4 +201,3 @@ export default function App() {
     </ToastProvider>
   );
 }
-//
