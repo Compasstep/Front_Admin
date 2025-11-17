@@ -56,4 +56,3 @@ export default function UserChatLog({ user, onClose }) {
     </>
   );
 }
-//

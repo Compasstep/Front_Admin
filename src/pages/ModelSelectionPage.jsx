@@ -70,18 +70,23 @@ export default function ModelSelectionPage({ setPageTitle, refreshKey }) {
 
         {/* 모델 목록 테이블 */}
         <div className="model-table">
-          <div className="model-table-head">
+          
+          {/* --- [수정됨] grid-template-columns를 4열로 변경하고 Accuracy 제거 --- */}
+          <div className="model-table-head" style={{ gridTemplateColumns: '60px 1fr 1fr 1fr' }}>
             <div style={{width: '60px'}}></div>
             <div className="text-center">재학습 버전</div>
             <div className="text-center">Micro F1 Score</div>
             <div className="text-center">Macro F1 Score</div>
-            <div className="text-center">Accuracy</div>
+            {/* Accuracy 헤더 삭제됨 */}
           </div>
+          {/* --- [수정 완료] --- */}
+
           <div className="model-table-body">
             {/* 필터링된 모델 목록을 표시. 결과가 없으면 메시지를 보여줌 */}
             {filteredModels.length > 0 ? (
               filteredModels.map((model) => (
-                <div key={model.version} className="model-row">
+                /* --- [수정됨] grid-template-columns를 4열로 변경하고 Accuracy 제거 --- */
+                <div key={model.version} className="model-row" style={{ gridTemplateColumns: '60px 1fr 1fr 1fr' }}>
                   <div className="text-center">
                     <input 
                       type="checkbox" 
@@ -93,8 +98,9 @@ export default function ModelSelectionPage({ setPageTitle, refreshKey }) {
                   <div className="model-text-strong text-center">{model.version}</div>
                   <div className="model-text-normal text-center">{model.microF1.toFixed(2)}</div>
                   <div className="model-text-normal text-center">{model.macroF1.toFixed(2)}</div>
-                  <div className="model-text-normal text-center">{model.accuracy.toFixed(2)}</div>
+                  {/* Accuracy 데이터 삭제됨 */}
                 </div>
+                /* --- [수정 완료] --- */
               ))
             ) : (
               <div className="no-results">
@@ -114,4 +120,3 @@ export default function ModelSelectionPage({ setPageTitle, refreshKey }) {
     </>
   );
 }
-//

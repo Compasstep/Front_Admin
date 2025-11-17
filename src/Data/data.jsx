@@ -163,4 +163,3 @@ export const generateDummyLogs = (userId) => {
     };
   }).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)); // 생성된 로그를 최신순으로 정렬함.
 };
-//
