@@ -3,7 +3,8 @@ import react from '@vitejs/plugin-react'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+    base: '/admin/',
+    plugins: [react()],
   
   // --- [추가됨] 서버 설정 ---
   server: {

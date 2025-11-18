@@ -296,36 +296,45 @@ function toNum(v) {
   return Number.isFinite(n) ? n : undefined;
 }
 
-// 감정 수정 저장
+// 감정 수정 저장 (Invalid → Valid)
 export async function convertInvalidToValid(reviewId, labelsEn = []) {
-  try {
-    const res = await fetch(`/api/admin/retrain/convert`, {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify({ reviewId, emotions: labelsEn }),
-    });
-    if (!res.ok) throw new Error(`convert failed ${res.status}`);
-    return await res.json();
-  } catch (e) {
-    console.error("[convertInvalidToValid] error", e);
-    return null;
-  }
+    try {
+        const res = await fetch(`/api/admin/retrain/invalid/convert/${reviewId}`, {
+            method: "PATCH",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+            // 🔥 백엔드 DTO 필드명에 맞춰 보냄 (finalLabels)
+            body: JSON.stringify({ finalLabels: labelsEn }),
+        });
+
+        if (!res.ok) throw new Error(`convert failed ${res.status}`);
+        return await res.json();
+    } catch (e) {
+        console.error("[convertInvalidToValid] error", e);
+        return null;
+    }
 }
 
-// 되돌리기
+// 되돌리기 (Valid → Invalid)
 export async function revertValidToInvalid(reviewId) {
-  try {
-    const res = await fetch(`/api/admin/retrain/revert`, {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify({ reviewId }),
-    });
-    if (!res.ok) throw new Error(`revert failed ${res.status}`);
-    return await res.json();
-  } catch (e) {
-    console.error("[revertValidToInvalid] error", e);
-    return null;
-  }
+    try {
+        const res = await fetch(`/api/admin/retrain/valid/convert/${reviewId}`, {
+            method: "PATCH",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+            // 이 API는 @RequestBody 안 받으니까 body 없이 가도 됨
+        });
+
+        if (!res.ok) throw new Error(`revert failed ${res.status}`);
+        return await res.json();
+    } catch (e) {
+        console.error("[revertValidToInvalid] error", e);
+        return null;
+    }
 }
