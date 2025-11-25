@@ -376,8 +376,8 @@ function getSourceMeta(i) {
           <div className="kpi-value">{kpiTotalUsers}</div>
         </div>
         <div className="kpi">
-          <div className="kpi-label">오늘 가입자 수</div>
-          <div className="kpi-value">{KPI.todaySignups}</div>
+            <div className="kpi-label">재학습 데이터 수</div>
+            <div className="kpi-value">{queueLeft}</div>
         </div>
         <div className="kpi kpi-clickable" onClick={() => onGotoUserManagement('BLOCKED')}>
           <div className="kpi-label">차단 유저 수</div>
